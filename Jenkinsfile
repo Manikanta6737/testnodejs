@@ -34,9 +34,11 @@ spec:
 }
   }
   stages { 
-    stage('Docker Build')
+    stage('Docker Build') {
        steps {
            sh 'docker build -t nodeimage:v1 .'
       }
     }
- }
+  }
+}  
+  
