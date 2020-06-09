@@ -39,4 +39,3 @@ spec:
     sh 'docker build -t nodeimage:v1 .'
       }
     }
-  }
