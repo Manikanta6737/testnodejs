@@ -34,7 +34,6 @@ spec:
 }
   }
  stage('Docker Build')
-  agent any
   steps {
     sh 'docker build -t nodeimage:v1 .'
       }
