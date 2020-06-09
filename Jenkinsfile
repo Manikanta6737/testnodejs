@@ -2,18 +2,17 @@ pipeline {
 
   environment {
     PROJECT = "still-smithy-279711"
-    APP_NAME = "node"
-    FE_SVC_NAME = "${APP_NAME}"
-    CLUSTER = "sample"
+    APP_NAME = "gceme"
+    FE_SVC_NAME = "${APP_NAME}-frontend"
+    CLUSTER = "jenkins"
     CLUSTER_ZONE = "us-central1-c"
     IMAGE_TAG = "us.gcr.io/${PROJECT}/${APP_NAME}:latest"
     JENKINS_CRED = "${PROJECT}"
-  
   }
 
   agent {
     kubernetes {
-      label 'nodejs'
+      label 'sample-app'
       defaultContainer 'jnlp'
       yaml """
 apiVersion: v1
@@ -25,13 +24,8 @@ spec:
   # Use service account that can deploy to all namespaces
   
   containers:
-  - name: node
-    image: us.gcr.io/still-smithy-279711/nodejs
-    command:
-    - cat
-    tty: true
-  - name: helm
-    image: us.gcr.io/still-smithy-279711/helm3
+  - name: gcloud
+    image: us.gcr.io/still-smithy-279711/gcloud
     command:
     - cat
     tty: true
@@ -39,12 +33,11 @@ spec:
 """
 }
   }
-  tools {nodejs "nodejs"}
-    stages {    
-    stage('Install dependencies') {
-      steps {
-        sh 'npm install'
+ stage('Docker Build')
+  agent any
+  steps {
+    sh 'docker build -t nodeimage:v1 .'
       }
-    }      
-  }   
+    }
+  }
 } 
